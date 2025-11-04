@@ -2,12 +2,7 @@
 
 import React from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'danger';
-  children: React.ReactNode;
-}
-
-export const Button: React.FC<ButtonProps> = ({ 
+export const Button = ({ 
   variant = 'primary', 
   children, 
   className = '',
@@ -21,3 +16,4 @@ export const Button: React.FC<ButtonProps> = ({
     </button>
   );
 };
+

@@ -2,15 +2,7 @@
 
 import React, { useEffect } from 'react';
 
-interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-  maxWidth?: string;
-}
-
-export const Modal: React.FC<ModalProps> = ({ 
+export const Modal = ({ 
   isOpen, 
   onClose, 
   title, 
@@ -82,3 +74,4 @@ export const Modal: React.FC<ModalProps> = ({
     </div>
   );
 };
+

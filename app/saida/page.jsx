@@ -34,7 +34,7 @@ export default function SaidaPage() {
     { value: 'Perda', label: 'Perda' },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
@@ -102,10 +102,10 @@ export default function SaidaPage() {
           </Alert>
         )}
 
-        <Card>
+        
           <div style={{ marginBottom: '20px', padding: '16px', background: 'var(--alert-bg)', borderRadius: '8px' }}>
             <p style={{ fontSize: '14px', color: 'var(--foreground)' }}>
-              ℹ️ <strong>Importante:</strong> Use este formulário para registrar saídas de produtos do estoque, 
+              ℹ️ Importante:</strong> Use este formulário para registrar saídas de produtos do estoque, 
               seja por vendas realizadas ou perdas/danos de produtos.
             </p>
           </div>
@@ -164,12 +164,13 @@ export default function SaidaPage() {
         {/* Card de Ajuda */}
         <Card title="💡 Dicas" className="mt-6">
           <ul style={{ paddingLeft: '20px', color: 'var(--foreground)', lineHeight: '1.8' }}>
-            <li><strong>Venda:</strong> Use quando produtos forem vendidos a clientes</li>
-            <li><strong>Perda:</strong> Use para produtos danificados, vencidos ou extraviados</li>
-            <li><strong>Observações:</strong> Adicione informações como número do pedido, cliente, motivo da perda, etc.</li>
+            Venda:</strong> Use quando produtos forem vendidos a clientes</li>
+            Perda:</strong> Use para produtos danificados, vencidos ou extraviados</li>
+            Observações:</strong> Adicione informações como número do pedido, cliente, motivo da perda, etc.</li>
           </ul>
         </Card>
       </div>
     </AuthLayout>
   );
 }
+

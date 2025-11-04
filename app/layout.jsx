@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Arimo } from "next/font/google";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
@@ -10,16 +9,12 @@ const arimo = Arimo({
   variable: "--font-arimo",
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "StockSync - Sistema de Gestão de Estoque",
   description: "Sistema profissional de gestão de estoque para empresas",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <body className={arimo.className}>
@@ -32,3 +27,4 @@ export default function RootLayout({
     </html>
   );
 }
+

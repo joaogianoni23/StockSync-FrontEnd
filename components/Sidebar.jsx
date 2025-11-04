@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from './Button';
 
-export const Sidebar: React.FC = () => {
+export const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuth();
@@ -159,3 +159,4 @@ export const Sidebar: React.FC = () => {
     </aside>
   );
 };
+

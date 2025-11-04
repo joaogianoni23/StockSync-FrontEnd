@@ -34,7 +34,7 @@ export default function EntradaPage() {
     { value: 'Devolução', label: 'Devolução' },
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
@@ -102,10 +102,10 @@ export default function EntradaPage() {
           </Alert>
         )}
 
-        <Card>
+        
           <div style={{ marginBottom: '20px', padding: '16px', background: 'var(--alert-bg)', borderRadius: '8px' }}>
             <p style={{ fontSize: '14px', color: 'var(--foreground)' }}>
-              ℹ️ <strong>Importante:</strong> Use este formulário para registrar entradas de produtos no estoque, 
+              ℹ️ Importante:</strong> Use este formulário para registrar entradas de produtos no estoque, 
               seja por compras realizadas ou devoluções de clientes.
             </p>
           </div>
@@ -164,12 +164,13 @@ export default function EntradaPage() {
         {/* Card de Ajuda */}
         <Card title="💡 Dicas" className="mt-6">
           <ul style={{ paddingLeft: '20px', color: 'var(--foreground)', lineHeight: '1.8' }}>
-            <li><strong>Compra:</strong> Use quando receber produtos de fornecedores</li>
-            <li><strong>Devolução:</strong> Use quando clientes retornarem produtos</li>
-            <li><strong>Observações:</strong> Adicione informações como número da nota fiscal, fornecedor, etc.</li>
+            Compra:</strong> Use quando receber produtos de fornecedores</li>
+            Devolução:</strong> Use quando clientes retornarem produtos</li>
+            Observações:</strong> Adicione informações como número da nota fiscal, fornecedor, etc.</li>
           </ul>
         </Card>
       </div>
     </AuthLayout>
   );
 }
+

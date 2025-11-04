@@ -10,25 +10,15 @@ import { Table } from '@/components/Table';
 import { Modal } from '@/components/Modal';
 import { Alert } from '@/components/Alert';
 
-interface Produto {
-  id: number;
-  nome: string;
-  categoria: string;
-  quantidade: number;
-  preco: number;
-  estoqueMinimo: number;
-  fornecedor: string;
-}
-
 export default function ProdutosPage() {
-  const [produtos, setProdutos] = useState<Produto[]>([
+  const [produtos, setProdutos] = useState([
     { id: 1, nome: 'Notebook Dell Inspiron', categoria: 'Informática', quantidade: 15, preco: 3500.00, estoqueMinimo: 10, fornecedor: 'Dell Brasil' },
     { id: 2, nome: 'Mouse Logitech MX Master', categoria: 'Periféricos', quantidade: 45, preco: 450.00, estoqueMinimo: 15, fornecedor: 'Logitech' },
     { id: 3, nome: 'Teclado Mecânico RGB', categoria: 'Periféricos', quantidade: 32, preco: 600.00, estoqueMinimo: 20, fornecedor: 'HyperX' },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduto, setEditingProduto] = useState<Produto | null>(null);
+  const [editingProduto, setEditingProduto] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -49,7 +39,7 @@ export default function ProdutosPage() {
     { value: 'Material de Escritório', label: 'Material de Escritório' },
   ];
 
-  const handleOpenModal = (produto?: Produto) => {
+  const handleOpenModal = (produto) => {
     if (produto) {
       setEditingProduto(produto);
       setFormData({
@@ -87,7 +77,7 @@ export default function ProdutosPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (editingProduto) {
@@ -100,7 +90,7 @@ export default function ProdutosPage() {
       setSuccessMessage('Produto atualizado com sucesso!');
     } else {
       // Adicionar novo produto
-      const novoProduto: Produto = {
+      const novoProduto = {
         id: Math.max(...produtos.map(p => p.id), 0) + 1,
         ...formData
       };
@@ -112,7 +102,7 @@ export default function ProdutosPage() {
     setTimeout(() => setSuccessMessage(''), 3000);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id) => {
     if (confirm('Tem certeza que deseja excluir este produto?')) {
       setProdutos(produtos.filter(p => p.id !== id));
       setSuccessMessage('Produto excluído com sucesso!');
@@ -256,3 +246,4 @@ export default function ProdutosPage() {
     </AuthLayout>
   );
 }
+

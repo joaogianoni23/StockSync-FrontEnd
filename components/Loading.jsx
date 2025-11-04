@@ -2,12 +2,7 @@
 
 import React from 'react';
 
-interface LoadingProps {
-  size?: 'small' | 'medium' | 'large';
-  text?: string;
-}
-
-export const Loading: React.FC<LoadingProps> = ({ size = 'medium', text = 'Carregando...' }) => {
+export const Loading = ({ size = 'medium', text = 'Carregando...' }) => {
   const sizeMap = {
     small: '24px',
     medium: '48px',
@@ -49,3 +44,4 @@ export const Loading: React.FC<LoadingProps> = ({ size = 'medium', text = 'Carre
     </div>
   );
 };
+

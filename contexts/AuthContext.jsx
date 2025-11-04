@@ -2,26 +2,10 @@
 
 import React, { createContext, useContext, useState } from 'react';
 
-export type UserRole = 'admin' | 'gerente' | 'estoquista';
+const AuthContext = createContext(undefined);
 
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  role: UserRole;
-}
-
-interface AuthContextType {
-  user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
-  logout: () => void;
-  isAuthenticated: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(() => {
     // Verificar se há usuário salvo no localStorage
     if (typeof window !== 'undefined') {
       const savedUser = localStorage.getItem('stocksync_user');
@@ -32,10 +16,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return null;
   });
 
-  const login = async (email: string, password: string): Promise<boolean> => {
+  const login = async (email, password) => {
     // Simulação de autenticação (substituir por chamada real à API)
     // Usuários de exemplo:
-    const mockUsers: Record<string, User & { password: string }> = {
+    const mockUsers = {
       'admin@stocksync.com': { 
         id: '1', 
         name: 'Administrador', 
@@ -91,3 +75,4 @@ export const useAuth = () => {
   }
   return context;
 };
+

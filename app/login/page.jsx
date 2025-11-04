@@ -16,7 +16,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -64,7 +64,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        <Card>
+        
           <h2 
             style={{
               fontSize: '24px',
@@ -122,12 +122,13 @@ export default function LoginPage() {
             }}
           >
             <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Usuários de teste:</p>
-            <p>👤 Admin: admin@stocksync.com / admin123</p>
-            <p>👤 Gerente: gerente@stocksync.com / gerente123</p>
-            <p>👤 Estoquista: estoquista@stocksync.com / estoquista123</p>
+            👤 Admin: admin@stocksync.com / admin123</p>
+            👤 Gerente: gerente@stocksync.com / gerente123</p>
+            👤 Estoquista: estoquista@stocksync.com / estoquista123</p>
           </div>
         </Card>
       </div>
     </div>
   );
 }
+

@@ -2,13 +2,7 @@
 
 import React from 'react';
 
-interface TableProps {
-  headers: string[];
-  data: (string | number | React.ReactNode)[][];
-  actions?: (row: (string | number | React.ReactNode)[], index: number) => React.ReactNode;
-}
-
-export const Table: React.FC<TableProps> = ({ headers, data, actions }) => {
+export const Table = ({ headers, data, actions }) => {
   return (
     <div style={{ overflowX: 'auto', borderRadius: '8px', border: '1px solid var(--border)' }}>
       <table style={{ width: '100%', borderCollapse: 'collapse' }}>
@@ -68,3 +62,4 @@ export const Table: React.FC<TableProps> = ({ headers, data, actions }) => {
     </div>
   );
 };
+

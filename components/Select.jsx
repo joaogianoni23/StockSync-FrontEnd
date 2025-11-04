@@ -2,14 +2,10 @@
 
 import React from 'react';
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string;
-}
-
-export const Input: React.FC<InputProps> = ({ 
+export const Select = ({ 
   label, 
   error, 
+  options,
   className = '',
   ...props 
 }) => {
@@ -20,10 +16,17 @@ export const Input: React.FC<InputProps> = ({
           {label}
         </label>
       )}
-      <input className={`input ${className}`} {...props} />
+      <select className={`input ${className}`} {...props}>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
       {error && (
         <p className="mt-1 text-xs" style={{ color: '#c44' }}>{error}</p>
       )}
     </div>
   );
 };
+

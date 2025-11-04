@@ -5,12 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from './Sidebar';
 
-interface AuthLayoutProps {
-  children: React.ReactNode;
-  requiredRoles?: ('admin' | 'gerente' | 'estoquista')[];
-}
-
-export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, requiredRoles }) => {
+export const AuthLayout = ({ children, requiredRoles }) => {
   const { isAuthenticated, user } = useAuth();
   const router = useRouter();
 
@@ -48,3 +43,4 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({ children, requiredRoles 
     </div>
   );
 };
+

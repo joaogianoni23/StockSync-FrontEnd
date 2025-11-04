@@ -2,13 +2,7 @@
 
 import React from 'react';
 
-interface AlertProps {
-  type?: 'warning' | 'error' | 'success' | 'info';
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const Alert: React.FC<AlertProps> = ({ 
+export const Alert = ({ 
   type = 'info', 
   children, 
   className = '' 
@@ -23,7 +17,8 @@ export const Alert: React.FC<AlertProps> = ({
       {type === 'error' && <span>❌</span>}
       {type === 'success' && <span>✅</span>}
       {type === 'info' && <span>ℹ️</span>}
-      <div>{children}</div>
+      {children}
     </div>
   );
 };
+

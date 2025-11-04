@@ -9,18 +9,8 @@ import { Table } from '@/components/Table';
 import { Modal } from '@/components/Modal';
 import { Alert } from '@/components/Alert';
 
-interface Fornecedor {
-  id: number;
-  nome: string;
-  cnpj: string;
-  contato: string;
-  email: string;
-  telefone: string;
-  endereco: string;
-}
-
 export default function FornecedoresPage() {
-  const [fornecedores, setFornecedores] = useState<Fornecedor[]>([
+  const [fornecedores, setFornecedores] = useState([
     { 
       id: 1, 
       nome: 'Dell Brasil', 
@@ -42,7 +32,7 @@ export default function FornecedoresPage() {
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingFornecedor, setEditingFornecedor] = useState<Fornecedor | null>(null);
+  const [editingFornecedor, setEditingFornecedor] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -55,7 +45,7 @@ export default function FornecedoresPage() {
     endereco: ''
   });
 
-  const handleOpenModal = (fornecedor?: Fornecedor) => {
+  const handleOpenModal = (fornecedor) => {
     if (fornecedor) {
       setEditingFornecedor(fornecedor);
       setFormData({
@@ -93,7 +83,7 @@ export default function FornecedoresPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     
     if (editingFornecedor) {
@@ -106,7 +96,7 @@ export default function FornecedoresPage() {
       setSuccessMessage('Fornecedor atualizado com sucesso!');
     } else {
       // Adicionar novo fornecedor
-      const novoFornecedor: Fornecedor = {
+      const novoFornecedor = {
         id: Math.max(...fornecedores.map(f => f.id), 0) + 1,
         ...formData
       };
@@ -118,7 +108,7 @@ export default function FornecedoresPage() {
     setTimeout(() => setSuccessMessage(''), 3000);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id) => {
     if (confirm('Tem certeza que deseja excluir este fornecedor?')) {
       setFornecedores(fornecedores.filter(f => f.id !== id));
       setSuccessMessage('Fornecedor excluído com sucesso!');
@@ -263,3 +253,4 @@ export default function FornecedoresPage() {
     </AuthLayout>
   );
 }
+
