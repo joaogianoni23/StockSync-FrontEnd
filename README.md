@@ -1,36 +1,156 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📦 StockSync - Sistema de Gestão de Estoque
 
-## Getting Started
+Sistema profissional de gestão de estoque desenvolvido com Next.js 15, TypeScript e design minimalista.
 
-First, run the development server:
+## 🎨 Design
 
+### Paleta de Cores
+- **#AF8762** — Marrom claro (cor principal)
+- **#F0E5C9** — Bege claro (fundo e áreas neutras)
+- **#000000** — Preto (texto e modo escuro)
+
+### Tipografia
+- **Fonte Arimo** — Usada em todo o sistema
+
+### Modos de Tema
+- **Modo Claro**: Fundo bege, botões marrom, texto preto
+- **Modo Escuro**: Fundo preto, texto bege, destaques marrom claro
+
+## 🚀 Funcionalidades
+
+### Para Admin/Gerente
+- ✅ **Tela de Login** - Autenticação segura
+- ✅ **Dashboard** - Visão geral com valor total do estoque e alertas
+- ✅ **Gestão de Produtos** - CRUD completo (Criar, Ler, Atualizar, Deletar)
+- ✅ **Gestão de Fornecedores** - CRUD completo
+- ✅ **Histórico de Movimentações** - Registro de entradas e saídas
+
+### Para Estoquista
+- ✅ **Registrar Entrada** - Formulário para compras e devoluções
+- ✅ **Registrar Saída** - Formulário para vendas e perdas
+
+## 👤 Usuários de Teste
+
+### Administrador
+- **Email**: admin@stocksync.com
+- **Senha**: admin123
+
+### Gerente
+- **Email**: gerente@stocksync.com
+- **Senha**: gerente123
+
+### Estoquista
+- **Email**: estoquista@stocksync.com
+- **Senha**: estoquista123
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Next.js 15** - Framework React
+- **TypeScript** - Tipagem estática
+- **React Context API** - Gerenciamento de estado
+- **CSS Custom Properties** - Temas dinâmicos
+- **Font Arimo** - Tipografia profissional
+
+## 📦 Instalação e Execução
+
+1. Instale as dependências:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Execute o servidor de desenvolvimento:
+```bash
+npm run dev
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Acesse no navegador:
+```
+http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📁 Estrutura do Projeto
 
-## Learn More
+```
+nome-do-projeto/
+├── app/
+│   ├── dashboard/        # Dashboard admin
+│   ├── produtos/         # Gestão de produtos
+│   ├── fornecedores/     # Gestão de fornecedores
+│   ├── historico/        # Histórico de movimentações
+│   ├── entrada/          # Registro de entrada
+│   ├── saida/            # Registro de saída
+│   ├── login/            # Tela de login
+│   ├── layout.tsx        # Layout principal
+│   ├── page.tsx          # Página inicial (redireciona)
+│   └── globals.css       # Estilos globais
+├── components/
+│   ├── Alert.tsx         # Componente de alerta
+│   ├── AuthLayout.tsx    # Layout autenticado
+│   ├── Button.tsx        # Componente de botão
+│   ├── Card.tsx          # Componente de card
+│   ├── Input.tsx         # Componente de input
+│   ├── Modal.tsx         # Componente de modal
+│   ├── Select.tsx        # Componente de select
+│   ├── Sidebar.tsx       # Barra lateral de navegação
+│   └── Table.tsx         # Componente de tabela
+└── contexts/
+    ├── AuthContext.tsx   # Contexto de autenticação
+    └── ThemeContext.tsx  # Contexto de tema
+```
 
-To learn more about Next.js, take a look at the following resources:
+## 🎯 Rotas
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/` - Redireciona para login ou dashboard
+- `/login` - Tela de login
+- `/dashboard` - Dashboard (Admin/Gerente)
+- `/produtos` - Gestão de produtos (Admin/Gerente)
+- `/fornecedores` - Gestão de fornecedores (Admin/Gerente)
+- `/historico` - Histórico de movimentações (Admin/Gerente)
+- `/entrada` - Registrar entrada (Estoquista)
+- `/saida` - Registrar saída (Estoquista)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🔒 Controle de Acesso
 
-## Deploy on Vercel
+O sistema possui controle de acesso baseado em roles:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Admin/Gerente**: Acesso completo a todas as funcionalidades
+- **Estoquista**: Acesso apenas aos formulários de entrada e saída
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🌓 Modo Escuro/Claro
+
+O sistema possui alternância entre modo claro e escuro:
+- Use o botão na barra lateral para alternar
+- A preferência é salva no localStorage
+
+## 📱 Responsividade
+
+O sistema é totalmente responsivo e funciona bem em:
+- 💻 Desktop
+- 📱 Tablets
+
+## 🔄 Próximos Passos
+
+Para produção, você precisará:
+
+1. **Integrar com Backend/API**
+   - Substituir dados mockados por chamadas reais
+   - Implementar autenticação JWT
+   - Criar endpoints REST ou GraphQL
+
+2. **Adicionar Validações**
+   - Validação de formulários com Zod ou Yup
+   - Tratamento de erros robusto
+
+3. **Melhorias de UX**
+   - Loading states
+   - Skeleton screens
+   - Toasts de notificação
+
+4. **Testes**
+   - Testes unitários
+   - Testes de integração
+   - Testes E2E
+
+---
+
+Desenvolvido com ❤️ usando Next.js e TypeScript
