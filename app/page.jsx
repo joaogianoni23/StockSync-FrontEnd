@@ -7,9 +7,11 @@ import { Loading } from '@/components/Loading';
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   useEffect(() => {
+    if (isLoading) return; // Aguardar o carregamento do estado de autenticação
+    
     if (isAuthenticated && user) {
       // Redirecionar baseado no tipo de usuário
       if (user.role === 'estoquista') {
@@ -20,7 +22,7 @@ export default function Home() {
     } else {
       router.push('/login');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, router, isLoading]);
 
   return (
     <div 

@@ -1,20 +1,26 @@
 'use client';
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(undefined);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    // Verificar se há usuário salvo no localStorage
-    if (typeof window !== 'undefined') {
-      const savedUser = localStorage.getItem('stocksync_user');
-      if (savedUser) {
-        return JSON.parse(savedUser);
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Carregar usuário do localStorage após a montagem do componente
+    const savedUser = localStorage.getItem('stocksync_user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Erro ao carregar usuário:', error);
+        localStorage.removeItem('stocksync_user');
       }
     }
-    return null;
-  });
+    setIsLoading(false);
+  }, []);
 
   const login = async (email, password) => {
     // Simulação de autenticação (substituir por chamada real à API)
@@ -62,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

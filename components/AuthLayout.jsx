@@ -6,10 +6,12 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Sidebar } from './Sidebar';
 
 export const AuthLayout = ({ children, requiredRoles }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    if (isLoading) return; // Aguardar o carregamento do estado de autenticação
+    
     if (!isAuthenticated) {
       router.push('/login');
     } else if (requiredRoles && user && !requiredRoles.includes(user.role)) {
@@ -20,9 +22,9 @@ export const AuthLayout = ({ children, requiredRoles }) => {
         router.push('/dashboard');
       }
     }
-  }, [isAuthenticated, user, router, requiredRoles]);
+  }, [isAuthenticated, user, router, requiredRoles, isLoading]);
 
-  if (!isAuthenticated || (requiredRoles && user && !requiredRoles.includes(user.role))) {
+  if (isLoading || !isAuthenticated || (requiredRoles && user && !requiredRoles.includes(user.role))) {
     return null;
   }
 

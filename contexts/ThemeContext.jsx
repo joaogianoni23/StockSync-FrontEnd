@@ -5,15 +5,21 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 const ThemeContext = createContext(undefined);
 
 export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('stocksync_theme');
-      return savedTheme || 'light';
-    }
-    return 'light';
-  });
+  const [theme, setTheme] = useState('light');
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    // Carregar tema do localStorage após a montagem do componente
+    const savedTheme = localStorage.getItem('stocksync_theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+    
     const root = document.documentElement;
     if (theme === 'dark') {
       root.setAttribute('data-theme', 'dark');
@@ -21,7 +27,7 @@ export const ThemeProvider = ({ children }) => {
       root.removeAttribute('data-theme');
     }
     localStorage.setItem('stocksync_theme', theme);
-  }, [theme]);
+  }, [theme, isMounted]);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
