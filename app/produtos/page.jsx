@@ -10,14 +10,20 @@ import { Table } from '@/components/Table';
 import { Modal } from '@/components/Modal';
 import { Alert } from '@/components/Alert';
 import { Loading } from '@/components/Loading';
+import BarcodeScanner from '@/components/BarcodeScanner';
 import { productsAPI, suppliersAPI } from '@/services/api';
 
 export default function ProdutosPage() {
   const [produtos, setProdutos] = useState([]);
   const [fornecedores, setFornecedores] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBarcodeModalOpen, setIsBarcodeModalOpen] = useState(false);
+  const [showBarcodeScanner, setShowBarcodeScanner] = useState(false);
+  const [scannerMode, setScannerMode] = useState('search'); // 'search' ou 'create'
   const [editingProduto, setEditingProduto] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [barcodeSearch, setBarcodeSearch] = useState('');
+  const [searchingBarcode, setSearchingBarcode] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(true);
@@ -165,6 +171,95 @@ export default function ProdutosPage() {
     }
   };
 
+  const handleSearchByBarcode = async () => {
+    if (!barcodeSearch.trim()) {
+      setErrorMessage('Digite um código de barras para buscar');
+      return;
+    }
+
+    try {
+      setSearchingBarcode(true);
+      setErrorMessage('');
+      const produto = await productsAPI.getByBarcode(barcodeSearch);
+      
+      // Fechar modal de busca
+      setIsBarcodeModalOpen(false);
+      setBarcodeSearch('');
+      
+      // Abrir modal de edição com o produto encontrado
+      handleOpenModal(produto);
+      setSuccessMessage(`Produto "${produto.name}" encontrado!`);
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (err) {
+      console.error('Erro ao buscar produto:', err);
+      setErrorMessage(err.message || 'Produto não encontrado');
+    } finally {
+      setSearchingBarcode(false);
+    }
+  };
+
+  const handleOpenBarcodeModal = () => {
+    setBarcodeSearch('');
+    setErrorMessage('');
+    setScannerMode('search');
+    setShowBarcodeScanner(true);
+  };
+
+  const handleCloseBarcodeModal = () => {
+    setIsBarcodeModalOpen(false);
+    setShowBarcodeScanner(false);
+    setBarcodeSearch('');
+    setErrorMessage('');
+  };
+
+  const handleCloseBarcodeScanner = () => {
+    setShowBarcodeScanner(false);
+    setErrorMessage('');
+  };
+
+  const handleOpenCameraForCreate = () => {
+    setScannerMode('create');
+    setShowBarcodeScanner(true);
+  };
+
+  const handleBarcodeDetected = async (barcode) => {
+    setShowBarcodeScanner(false);
+    
+    if (scannerMode === 'search') {
+      // Modo de busca: buscar o produto e abrir para edição
+      try {
+        setSearchingBarcode(true);
+        setErrorMessage('');
+        const produto = await productsAPI.getByBarcode(barcode);
+        
+        handleOpenModal(produto);
+        setSuccessMessage(`Produto "${produto.name}" encontrado!`);
+        setTimeout(() => setSuccessMessage(''), 3000);
+      } catch (err) {
+        console.error('Erro ao buscar produto:', err);
+        setErrorMessage(err.message || 'Produto não encontrado');
+        // Permitir digitar manualmente
+        setBarcodeSearch(barcode);
+        setIsBarcodeModalOpen(true);
+      } finally {
+        setSearchingBarcode(false);
+      }
+    } else {
+      // Modo de criação: preencher o campo de código de barras e abrir modal
+      setFormData({ ...formData, barcode });
+      setIsModalOpen(true);
+    }
+  };
+
+  const handleSwitchToManualInput = () => {
+    setShowBarcodeScanner(false);
+    if (scannerMode === 'search') {
+      setIsBarcodeModalOpen(true);
+    } else {
+      setIsModalOpen(true);
+    }
+  };
+
   const filteredProdutos = produtos.filter(p =>
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -197,9 +292,14 @@ export default function ProdutosPage() {
           <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: 'var(--primary)' }}>
             Gestão de Produtos
           </h1>
-          <Button onClick={() => handleOpenModal()}>
-            ➕ Novo Produto
-          </Button>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Button variant="secondary" onClick={handleOpenBarcodeModal}>
+              🔍 Buscar por Código de Barras
+            </Button>
+            <Button onClick={() => handleOpenModal()}>
+              ➕ Novo Produto
+            </Button>
+          </div>
         </div>
 
         {successMessage && (
@@ -265,15 +365,34 @@ export default function ProdutosPage() {
               </Alert>
             )}
 
-            <Input
-              label="Código de Barras (EAN-13)"
-              type="text"
-              value={formData.barcode}
-              onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
-              placeholder="1234567890123"
-              required
-              disabled={submitting || !!editingProduto}
-            />
+            <div style={{ position: 'relative' }}>
+              <Input
+                label="Código de Barras (EAN-13)"
+                type="text"
+                value={formData.barcode}
+                onChange={(e) => setFormData({ ...formData, barcode: e.target.value })}
+                placeholder="1234567890123"
+                required
+                disabled={submitting}
+              />
+              {!editingProduto && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={handleOpenCameraForCreate}
+                  disabled={submitting}
+                  style={{
+                    position: 'absolute',
+                    right: '8px',
+                    top: '32px',
+                    padding: '6px 12px',
+                    fontSize: '14px'
+                  }}
+                >
+                  📷 Escanear
+                </Button>
+              )}
+            </div>
 
             <Input
               label="Nome do Produto"
@@ -347,6 +466,69 @@ export default function ProdutosPage() {
               </Button>
             </div>
           </form>
+        </Modal>
+
+        <Modal
+          isOpen={isBarcodeModalOpen}
+          onClose={handleCloseBarcodeModal}
+          title="Buscar Produto por Código de Barras"
+          maxWidth="500px"
+        >
+          <div>
+            {errorMessage && (
+              <Alert type="error" className="mb-4">
+                {errorMessage}
+              </Alert>
+            )}
+
+            <Input
+              label="Código de Barras (EAN-13)"
+              type="text"
+              value={barcodeSearch}
+              onChange={(e) => setBarcodeSearch(e.target.value)}
+              placeholder="1234567890123"
+              disabled={searchingBarcode}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && barcodeSearch.trim()) {
+                  e.preventDefault();
+                  handleSearchByBarcode();
+                }
+              }}
+              autoFocus
+            />
+
+            <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
+              <Button
+                onClick={handleSearchByBarcode}
+                style={{ flex: 1 }}
+                disabled={searchingBarcode || !barcodeSearch.trim()}
+              >
+                {searchingBarcode ? '🔍 Buscando...' : '🔍 Buscar'}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={handleCloseBarcodeModal}
+                style={{ flex: 1 }}
+                disabled={searchingBarcode}
+              >
+                Cancelar
+              </Button>
+            </div>
+          </div>
+        </Modal>
+
+        <Modal
+          isOpen={showBarcodeScanner}
+          onClose={handleCloseBarcodeScanner}
+          title={scannerMode === 'search' ? '📷 Escanear Código de Barras' : '📷 Escanear para Cadastrar'}
+          maxWidth="600px"
+        >
+          <BarcodeScanner
+            onDetected={handleBarcodeDetected}
+            onClose={handleCloseBarcodeScanner}
+            onManualInput={handleSwitchToManualInput}
+          />
         </Modal>
       </div>
     </AuthLayout>
