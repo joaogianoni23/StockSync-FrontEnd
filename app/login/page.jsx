@@ -22,15 +22,15 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const success = await login(email, password);
+      const result = await login(email, password);
       
-      if (success) {
+      if (result.success) {
         router.push('/dashboard');
       } else {
-        setError('Email ou senha incorretos');
+        setError(result.error || 'Email ou senha incorretos');
       }
-    } catch {
-      setError('Erro ao fazer login. Tente novamente.');
+    } catch (err) {
+      setError(err.message || 'Erro ao fazer login. Tente novamente.');
     } finally {
       setLoading(false);
     }
@@ -122,9 +122,8 @@ export default function LoginPage() {
             }}
           >
             <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Usuários de teste:</p>
-            <p>👤 Admin: admin@stocksync.com / admin123</p>
-            <p>👤 Gerente: gerente@stocksync.com / gerente123</p>
-            <p>👤 Estoquista: estoquista@stocksync.com / estoquista123</p>
+            <p>👤 Admin: admin@stocksync.com / 123456</p>
+            <p>👤 Estoquista: maria.estoquista@stocksync.com / 123456</p>
           </div>
         </Card>
       </div>
